@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
+  resource :session
+  resources :passwords, param: :token
   namespace :api do
     namespace :v1 do
-      get "health/index"
+      get :health, to: "health#index"
     end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

@@ -2,7 +2,7 @@ require "test_helper"
 
 class Api::V1::HealthControllerTest < ActionDispatch::IntegrationTest
   def test_should_get_index_and_return_healthy_status
-    get api_v1_health_index_url
+    get api_v1_health_url
     assert_response :success
     
     json_response = JSON.parse(response.body)
@@ -18,12 +18,12 @@ class Api::V1::HealthControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_should_return_json_content_type
-    get api_v1_health_index_url
+    get api_v1_health_url
     assert_equal "application/json; charset=utf-8", response.content_type
   end
 
   def test_should_return_correct_json_structure
-    get api_v1_health_index_url
+    get api_v1_health_url
     json_response = JSON.parse(response.body)
     
     expected_keys = %w[status timestamp version]
@@ -32,7 +32,7 @@ class Api::V1::HealthControllerTest < ActionDispatch::IntegrationTest
 
   def test_should_return_timestamp_close_to_current_time
     freeze_time do
-      get api_v1_health_index_url
+      get api_v1_health_url
       json_response = JSON.parse(response.body)
       
       returned_time = Time.parse(json_response["timestamp"])
