@@ -54,7 +54,6 @@ jobs:
     - name: Run Rails system tests
       working-directory: ./backend
       run: bundle exec rails test:system
-      continue-on-error: true
 
   frontend-tests:
     name: React Frontend Tests
@@ -112,19 +111,16 @@ jobs:
     - name: Run RuboCop (Rails linting)
       working-directory: ./backend
       run: bundle exec rubocop
-      continue-on-error: true
 
     - name: Run ESLint (React linting)
       working-directory: ./frontend
       run: npx eslint src --ext .ts,.tsx,.js,.jsx
-      continue-on-error: true
 
     - name: Run Brakeman (Rails security scan)
       working-directory: ./backend
       run: |
         gem install brakeman
         brakeman --no-pager
-      continue-on-error: true
 
   integration-tests:
     name: Integration Tests
