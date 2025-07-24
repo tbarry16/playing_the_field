@@ -1,0 +1,190 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  backend-tests:
+    name: Rails Backend Tests
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD || 'testpassword123' }}
+          POSTGRES_DB: backend_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: postgres://postgres:${{ secrets.POSTGRES_PASSWORD || 'testpassword123' }}@localhost:5432/backend_test
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.4'
+        bundler-cache: true
+        working-directory: ./backend
+
+    - name: Set up Database
+      working-directory: ./backend
+      run: |
+        bundle exec rails db:create
+        bundle exec rails db:schema:load
+
+    - name: Run Rails tests
+      working-directory: ./backend
+      run: bundle exec rails test
+
+  frontend-tests:
+    name: React Frontend Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: ./frontend/package-lock.json
+
+    - name: Install dependencies
+      working-directory: ./frontend
+      run: npm ci
+
+    - name: Run React tests
+      working-directory: ./frontend
+      run: npm test -- --coverage --watchAll=false
+
+    - name: Build React app
+      working-directory: ./frontend
+      run: npm run build
+
+  lint-and-security:
+    name: Linting and Security
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.4'
+        bundler-cache: true
+        working-directory: ./backend
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: ./frontend/package-lock.json
+
+    - name: Install frontend dependencies
+      working-directory: ./frontend
+      run: npm ci
+
+    - name: Run RuboCop (Rails linting)
+      working-directory: ./backend
+      run: bundle exec rubocop
+
+    - name: Run ESLint (React linting)
+      working-directory: ./frontend
+      run: npx eslint src --ext .ts,.tsx,.js,.jsx
+
+    - name: Run Brakeman (Rails security scan)
+      working-directory: ./backend
+      run: |
+        gem install brakeman
+        brakeman --no-pager
+
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: [backend-tests, frontend-tests]
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD || 'testpassword123' }}
+          POSTGRES_DB: backend_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: postgres://postgres:${{ secrets.POSTGRES_PASSWORD || 'testpassword123' }}@localhost:5432/backend_test
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.4'
+        bundler-cache: true
+        working-directory: ./backend
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: ./frontend/package-lock.json
+
+    - name: Install frontend dependencies
+      working-directory: ./frontend
+      run: npm ci
+
+    - name: Build React app
+      working-directory: ./frontend
+      run: npm run build
+
+    - name: Set up Database
+      working-directory: ./backend
+      run: |
+        bundle exec rails db:create
+        bundle exec rails db:schema:load
+
+    - name: Start Rails server
+      working-directory: ./backend
+      run: |
+        bundle exec rails server -d -p 3001
+        sleep 5
+
+    - name: Test API endpoints
+      run: |
+        curl -f http://localhost:3001/up || exit 1
+        curl -f http://localhost:3001/api/v1/health || exit 1
+
+    - name: Stop Rails server
+      run: |
+        pkill -f "rails server" || true

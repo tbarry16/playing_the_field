@@ -58,12 +58,13 @@ describe('App Component', () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Status:/)).toBeInTheDocument();
-      expect(screen.getByText('healthy')).toBeInTheDocument();
-      expect(screen.getByText(/Version:/)).toBeInTheDocument();
-      expect(screen.getByText('1.0.0')).toBeInTheDocument();
-      expect(screen.getByText(/Timestamp:/)).toBeInTheDocument();
-      expect(screen.getByText('2024-01-01T12:00:00Z')).toBeInTheDocument();
     });
+    
+    expect(screen.getByText('healthy')).toBeInTheDocument();
+    expect(screen.getByText(/Version:/)).toBeInTheDocument();
+    expect(screen.getByText('1.0.0')).toBeInTheDocument();
+    expect(screen.getByText(/Timestamp:/)).toBeInTheDocument();
+    expect(screen.getByText('2024-01-01T12:00:00Z')).toBeInTheDocument();
 
     expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
   });
