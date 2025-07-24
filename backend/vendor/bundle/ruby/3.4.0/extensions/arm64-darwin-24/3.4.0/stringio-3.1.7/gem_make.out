@@ -1,0 +1,19 @@
+current directory: /Users/timothybarry/src/playing_the_field/backend/vendor/bundle/ruby/3.4.0/gems/stringio-3.1.7/ext/stringio
+/opt/homebrew/opt/ruby/bin/ruby extconf.rb
+checking for rb_io_mode_t in ruby/io.h... no
+creating Makefile
+
+current directory: /Users/timothybarry/src/playing_the_field/backend/vendor/bundle/ruby/3.4.0/gems/stringio-3.1.7/ext/stringio
+make DESTDIR\= sitearchdir\=./.gem.20250723-82734-t9emac sitelibdir\=./.gem.20250723-82734-t9emac clean
+
+current directory: /Users/timothybarry/src/playing_the_field/backend/vendor/bundle/ruby/3.4.0/gems/stringio-3.1.7/ext/stringio
+make DESTDIR\= sitearchdir\=./.gem.20250723-82734-t9emac sitelibdir\=./.gem.20250723-82734-t9emac
+compiling stringio.c
+linking shared-object stringio.bundle
+
+current directory: /Users/timothybarry/src/playing_the_field/backend/vendor/bundle/ruby/3.4.0/gems/stringio-3.1.7/ext/stringio
+make DESTDIR\= sitearchdir\=./.gem.20250723-82734-t9emac sitelibdir\=./.gem.20250723-82734-t9emac install
+/usr/bin/install -c -m 0755 stringio.bundle ./.gem.20250723-82734-t9emac
+
+current directory: /Users/timothybarry/src/playing_the_field/backend/vendor/bundle/ruby/3.4.0/gems/stringio-3.1.7/ext/stringio
+make DESTDIR\= sitearchdir\=./.gem.20250723-82734-t9emac sitelibdir\=./.gem.20250723-82734-t9emac clean

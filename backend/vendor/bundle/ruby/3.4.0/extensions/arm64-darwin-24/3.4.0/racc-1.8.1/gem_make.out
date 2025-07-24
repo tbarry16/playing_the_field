@@ -1,0 +1,18 @@
+current directory: /Users/timothybarry/src/playing_the_field/backend/vendor/bundle/ruby/3.4.0/gems/racc-1.8.1/ext/racc/cparse
+/opt/homebrew/opt/ruby/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/timothybarry/src/playing_the_field/backend/vendor/bundle/ruby/3.4.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20250723-82734-5fr3ym sitelibdir\=./.gem.20250723-82734-5fr3ym clean
+
+current directory: /Users/timothybarry/src/playing_the_field/backend/vendor/bundle/ruby/3.4.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20250723-82734-5fr3ym sitelibdir\=./.gem.20250723-82734-5fr3ym
+compiling cparse.c
+linking shared-object racc/cparse.bundle
+
+current directory: /Users/timothybarry/src/playing_the_field/backend/vendor/bundle/ruby/3.4.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20250723-82734-5fr3ym sitelibdir\=./.gem.20250723-82734-5fr3ym install
+/usr/bin/install -c -m 0755 cparse.bundle ./.gem.20250723-82734-5fr3ym/racc
+
+current directory: /Users/timothybarry/src/playing_the_field/backend/vendor/bundle/ruby/3.4.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20250723-82734-5fr3ym sitelibdir\=./.gem.20250723-82734-5fr3ym clean
