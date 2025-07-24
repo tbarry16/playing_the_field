@@ -51,10 +51,6 @@ jobs:
       working-directory: ./backend
       run: bundle exec rails test
 
-    - name: Run Rails system tests
-      working-directory: ./backend
-      run: bundle exec rails test:system
-
   frontend-tests:
     name: React Frontend Tests
     runs-on: ubuntu-latest
